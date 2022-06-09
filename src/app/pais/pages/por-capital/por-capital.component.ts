@@ -13,6 +13,10 @@ export class PorCapitalComponent implements OnInit {
   termino: string = '';
   hayError: boolean = false;
 
+  paisesSugeridos: Country[] = []
+  mostrarSugerencias: boolean=false;
+  
+
   constructor( private paisService: PaisService ) { }
 
   ngOnInit(): void {
@@ -20,6 +24,7 @@ export class PorCapitalComponent implements OnInit {
 
   buscar(termino: string){
     this.hayError = false;
+    this.mostrarSugerencias = false;
     this.termino = termino;
     this.paisService.buscarCapital(this.termino).subscribe( paises =>{
     this.paises=paises;
@@ -32,5 +37,24 @@ export class PorCapitalComponent implements OnInit {
     
     
   }
+
+  sugerencias(termino: string){
+    this.hayError =false;
+    this.mostrarSugerencias= true;
+    this.termino = termino;
+    this.paisService.buscarCapital(this.termino).subscribe(paises =>{
+      this.paisesSugeridos = paises;
+      console.log(paises);
+    },(error) =>{
+      this.hayError=true;
+      this.paisesSugeridos = []
+    })
+      
+  }
+
+  buscarSugerido(termino:string){
+    this.buscar(termino);
+  }
+
 
 }
